@@ -16,7 +16,7 @@
         </el-form-item>
         <!-- 按钮 -->
         <el-form-item class="btns">
-          <el-button type="primary">登录</el-button>
+          <el-button type="primary" @click="login">登录</el-button>
           <el-button type="info" @click="resetLoginForm">重置</el-button>
         </el-form-item>
       </el-form>
@@ -39,12 +39,12 @@ export default {
         // 验证用户名是否合法
         username: [
           { required: true, message: '请输入正确的昵称', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 10个字符', trigger: 'blur' }
+          { min: 3, max: 6, message: '长度在 3 到 6个字符', trigger: 'blur' }
         ],
         // 验证密码是否合法
         password: [
           { required: true, message: '请输入密码', trigger: 'blur' },
-          { min: 3, max: 5, message: '长度在 3 到 10 个字符', trigger: 'blur' }
+          { min: 6, max: 12, message: '长度在 5到 12个字符', trigger: 'blur' }
         ]
       }
     }
@@ -53,7 +53,28 @@ export default {
     // 点击重置按钮，重置登录表单
     resetLoginForm() {
       // console.log(this);
+      //! $refs是固有属性,loginFormRef为表单的引用对象
       this.$refs.loginFormRef.resetFields()
+    },
+    // 表单进行预验证
+    login() {
+      this.$refs.loginFormRef.validate(async (valid) => {
+        if (!valid) return
+        // !{data:res}解构赋值
+        const { data: res } = await this.$http.post('login', this.loginForm)
+        // this的返回结果是promise所以可以用async
+        if (res.meta.status !== 200) {
+          return this.$message.error('登录失败')
+        }
+        // 储存token
+        // !将登陆成功之后的token ,保存到客户端的sessionStorage 中
+        // setItem储存.get获取
+        // 通过编程式导航跳转到后台主页, 路由地址是 / home
+        this.$message.success('登录成功')
+        window.sessionStorage.setItem('token', res.data.token)
+
+        this.$router.push('/home')
+      })
     }
   }
 }
