@@ -4,6 +4,9 @@ import Login from '../conponent/Login.vue'
 import Home from '../conponent/Home.vue'
 import Welcome from '../conponent/Welcome.vue'
 import Users from '../conponent/user/User.vue'
+import Rights from '../conponent/power/Rights.vue'
+import Roles from '../conponent/power/Roles.vue'
+import Cate from '../conponent/power/Cate.vue'
 
 import { refreshStyles } from 'less'
 import VueRouter from 'vue-router'
@@ -26,6 +29,14 @@ const routes = [
             {
                 path: '/users',
                 component: Users
+            },
+            {
+                path: '/rights',
+                component: Rights
+            },
+            {
+                path: '/roles',
+                component: Roles
             }
         ]
     }
